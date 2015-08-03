@@ -13,6 +13,10 @@
   var aspectExtractor = /@([^(]*)\((.*)\)/;
   var debugEnabled = false;
 
+  var printNotMappingWarning function printNotMappingWarning() {
+      console.warn('An event was dispatched that has no command mapped to it.')
+  };
+
   function escapeRegExp(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   }
@@ -155,7 +159,7 @@
         var result;
         while ((result = aspect.matcher.exec(stringList)) != null) {
           if (!targets[result[1]].interceptors) {
-            console.warn('An event was dispatched that has no command mapped to it.')
+            printNotMappingWarning();
             continue;
           }
 
@@ -321,6 +325,12 @@
         .then(function () {
           var deferred = $q.defer();
           try {
+            if (!descriptor.command.interceptors) {
+              printNotMappingWarning();
+              deferred.resolve();
+              return;
+            }
+
             if (descriptor.command.interceptors['Around']) {
               result = self.intercept('Around', descriptor.command.interceptors,
                 descriptor.command.commandFunction);
