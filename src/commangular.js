@@ -364,6 +364,10 @@
             descriptor.command.interceptors);
         })
         .then(function () {
+          if (!descriptor.command) {
+            printNotMappingWarning();
+            return;
+          }
           result = self.exeOnResult(self.contextData.lastResult);
           return self.processResults(result, descriptor.command.config);
         })
