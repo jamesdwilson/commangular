@@ -372,6 +372,10 @@
           return self.processResults(result, descriptor.command.config);
         })
         .then(function () {
+          if (!descriptor.command) {
+            printNotMappingWarning();
+            return;
+          }
           return self.intercept('After', descriptor.command.interceptors);
         }, function (error) {
           var deferred = $q.defer();
@@ -381,6 +385,10 @@
           }
           self.exeOnError(error);
           self.getContextData().lastError = error;
+          if (!descriptor.command) {
+            printNotMappingWarning();
+            return;
+          }
           self.intercept('AfterThrowing',
             descriptor.command.interceptors).then(function () {
               deferred.reject(error)
