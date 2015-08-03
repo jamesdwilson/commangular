@@ -356,6 +356,10 @@
           return deferred.promise;
         })
         .then(function () {
+          if (!descriptor.command) {
+            printNotMappingWarning();
+            return;
+          }
           return self.intercept('AfterExecution',
             descriptor.command.interceptors);
         })
