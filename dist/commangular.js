@@ -21,7 +21,7 @@
   var debugEnabled = false;
 
   var printNotMappingWarning = function printNotMappingWarning() {
-      console.warn('An event was dispatched that has no command mapped to it.')
+    console.warn('An event was dispatched that has no command mapped to it.')
   };
 
   function escapeRegExp(str) {
@@ -327,6 +327,10 @@
       deferExecution.resolve();
       return deferExecution.promise
         .then(function () {
+          if (!descriptor.command.interceptors) {
+            printNotMappingWarning();
+            return;
+          }
           return self.intercept('Before', descriptor.command.interceptors);
         })
         .then(function () {

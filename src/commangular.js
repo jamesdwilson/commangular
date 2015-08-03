@@ -14,7 +14,7 @@
   var debugEnabled = false;
 
   var printNotMappingWarning = function printNotMappingWarning() {
-      console.warn('An event was dispatched that has no command mapped to it.')
+    console.warn('An event was dispatched that has no command mapped to it.')
   };
 
   function escapeRegExp(str) {
@@ -158,7 +158,7 @@
       angular.forEach(collection, function (aspect) {
         var result;
         while ((result = aspect.matcher.exec(stringList)) != null) {
-          if (!targets[result[1]].interceptors) {
+          if (!targets[result[1]]) {
             printNotMappingWarning();
             continue;
           }
@@ -320,12 +320,16 @@
       deferExecution.resolve();
       return deferExecution.promise
         .then(function () {
+          if (!descriptor.command) {
+            printNotMappingWarning();
+            return;
+          }
           return self.intercept('Before', descriptor.command.interceptors);
         })
         .then(function () {
           var deferred = $q.defer();
           try {
-            if (!descriptor.command.interceptors) {
+            if (!descriptor.command) {
               printNotMappingWarning();
               deferred.resolve();
               return;
