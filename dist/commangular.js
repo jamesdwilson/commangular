@@ -20,7 +20,7 @@
   var aspectExtractor = /@([^(]*)\((.*)\)/;
   var debugEnabled = false;
 
-  var printNotMappingWarning function printNotMappingWarning() {
+  var printNotMappingWarning = function printNotMappingWarning() {
       console.warn('An event was dispatched that has no command mapped to it.')
   };
 
