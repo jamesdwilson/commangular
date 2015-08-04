@@ -250,6 +250,7 @@
           }
           sequenceChain();
         }, function (error) {
+          console.error("Commangular error while executing command",error);
           defer.reject(error)
         });
       }());
@@ -347,6 +348,7 @@
               descriptor.command.config).then(function () {
                 deferred.resolve();
               }, function (error) {
+                console.error("Error while executing Commangular command", error);
                 deferred.reject(error);
               });
           }
